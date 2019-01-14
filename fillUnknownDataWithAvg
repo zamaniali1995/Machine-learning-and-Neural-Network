@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jan 14 11:16:22 2019
+
+@author: ali
+"""
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jan 13 18:01:45 2019
+
+@author: arian
+"""
+#importing packages
+import tensorflow as tf
+import numpy as np
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis as qda
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as lda
+from sklearn import tree
+from sklearn.neighbors import KNeighborsClassifier as Knearest
+import sklearn.svm as svm
+from sklearn.metrics import accuracy_score as acc
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler,Imputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import roc_curve, roc_auc_score, classification_report, accuracy_score, confusion_matrix 
+import matplotlib.pyplot as plt
+#from pandas import read_csv
+import pandas as pd
+
+
+def dataLoader(directory):
+    c=[]
+    scaler = StandardScaler()
+    data = pd.read_csv(directory, header=None)
+#    data = data.replace(0, np.NaN)
+    imputer = Imputer()
+#    target , data = data[:,0] , data[:,1:]
+#    for i in range(1,36):
+#        c.append = data[data['ID']==i]
+#        data = imputer.fit_transform(c[i])
+#        data = scaler.fit_transform(c[i])
+#    data = pd.concat(c)
+    return data
+
+
+train_dir= './DataSet/Train_DB_1.csv'
+train_dir_withNan = './DataSet/merged_NaN.csv'
+data = dataLoader(train_dir_withNan)
+#imputer = Imputer()
+#transformed_X = imputer.fit_transform(data)
+#%%
+valid_data_dir = './DataSet/Test_Data.csv'
+valid_target_dir = './DataSet/Test_Labels.csv'
+validData = np.loadtxt(open(valid_data_dir, "rb"), delimiter = ",", skiprows = 1)
+mask= np.any(np.equal(validData,0), axis=1)
+validData= validData[~mask]
+validTarget=np.loadtxt(open(valid_target_dir, "rb"), delimiter = ",", skiprows = 1)
+validTarget= validTarget[~mask]
+scaler = StandardScaler()
+validData = scaler.fit_transform(validData)
+#%%
+# Classification QDA
+clf = qda()
+clf.fit(data,target)
+testPredict= clf.predict(validData)
+ans= acc(validTarget, testPredict)
+print(ans)
+
+# Classification LDA
+clf2= lda()
+clf2.fit(data,target)
+predictLDA= clf2.predict(validData)
+ans2= acc(validTarget, predictLDA)
+print(ans2)
+
+# Classification Tree
+clf3= tree.DecisionTreeClassifier()
+clf3.fit(data,target)
+predictTree= clf3.predict(validData)
+ans3= acc(validTarget, predictTree)
+print(ans3)
+
+# Classification KNN (with error!!)
+knn = Knearest(n_neighbors=2)
+knn.fit(data,target)
+predictKNN = knn.predict(validData)
+#ans3= acc(validTarget, ans3)
+#print(ans3)
+
+
+# Classification Kernel SVM
+clf4 = svm.NuSVC(kernel = 'sigmoid')
+clf4.fit(data, target)
+predicteSVM = clf4.predict(validData)
+ans4 = acc(validTarget, predicteSVM)
+print (ans4)
+
+
