@@ -118,7 +118,7 @@ print("KNN ACC= ", ans5)
 
 
 # Classification Kernel SVM
-clf4 = svm.NuSVC(kernel = 'sigmoid')
+clf4 = svm.NuSVC(kernel = 'poly', gamma='scale')
 clf4.fit(data_train, target_train)
 predicteSVM = clf4.predict(data_test)
 ans4 = acc(target_test, predicteSVM)
