@@ -56,17 +56,17 @@ def dataLoader(dir_dtrain_1, dir_dtrain_2, dir_data_test, dir_lable_test, merge_
         lable.append(data[data['ID']==i])
         lable[i-1]= imp.fit_transform(lable[i-1])
         lable[i-1]= scaler.fit_transform(lable[i-1])
-    if is_train:
-       with open('imputedTrain.csv', 'ab') as f:
-           for i in range(36):
-               np.savetxt(f, lable[i], delimiter=',')
-           data = pd.read_csv('imputedTrain.csv')
-    else:
-       with open('imputedTest.csv', 'ab') as f:
-           for i in range(36):  
-               np.savetxt(f, lable[i], delimiter=',')
-           data = pd.read_csv('imputedTest.csv')
-    return data_set, drop_idx, lable
+#    if is_train:
+#       with open('imputedTrain.csv', 'ab') as f:
+#           for i in range(36):
+#               np.savetxt(f, lable[i], delimiter=',')
+#           data = pd.read_csv('imputedTrain.csv')
+#    else:
+#       with open('imputedTest.csv', 'ab') as f:
+#           for i in range(36):  
+#               np.savetxt(f, lable[i], delimiter=',')s
+#           data = pd.read_csv('imputedTest.csv')
+    return data, drop_idx, lable
 
 
 train_dir_1= './DataSet/Train_DB_1.csv'
