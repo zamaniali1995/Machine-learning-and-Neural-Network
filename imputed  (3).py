@@ -124,18 +124,4 @@ predicteSVM = clf4.predict(data_test)
 ans4 = acc(target_test, predicteSVM)
 print ("kernel SVM ACC= ", ans4)
 
-#%%
-
-#merged = pd.read_csv('/home/arian/Desktop/stat learning/Home Work/assignment 3/DataSet/merged_NaN.csv')
-#lable=[]
-##scaler = StandardScaler()
-#imp = imputer(missing_values=np.NaN, strategy='mean')
-#for i in range(36):
-#    lable.append(merged[merged['ID']==1])
-#    lable[i]= imp.fit_transform(lable[i])
-#    lable[i]= scaler.fit_transform(lable[i])
-    
-#with open('outputfile.csv', 'ab') as f:
-#    for i in range(36):
-#        np.savetxt(f, lable[i], delimiter=',')
     
