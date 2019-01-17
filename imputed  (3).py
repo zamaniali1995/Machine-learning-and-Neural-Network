@@ -15,17 +15,15 @@ from sklearn.neighbors import KNeighborsClassifier as Knearest
 import sklearn.svm as svm
 from sklearn.metrics import accuracy_score as acc
 from sklearn.impute import SimpleImputer as imputer
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
-from sklearn.metrics import roc_curve, roc_auc_score, classification_report, accuracy_score, confusion_matrix 
-import matplotlib.pyplot as plt
+from sklearn.utils import shuffle
 
 def dataLoader(dir_dtrain_1, dir_dtrain_2, dir_data_test, dir_lable_test, merge_flag, is_train):
     if is_train:
         if merge_flag:
-            data_set = pd.read_csv(dir_dtrain_1)
+            data_set1 = pd.read_csv(dir_dtrain_1)
+            data_set2 = pd.read_csv(dir_dtrain_2)
+            data_set = pd.concat([data_set1, data_set2])
         else:
             data_set = pd.read_csv(dir_dtrain_1)
     else:
@@ -37,6 +35,7 @@ def dataLoader(dir_dtrain_1, dir_dtrain_2, dir_data_test, dir_lable_test, merge_
                       'F17', 'F18', 'F19']
     lable=[]
     scaler = StandardScaler(copy=False)
+    data_set = shuffle(data_set)
     data_set = data_set.replace(0, np.NaN)
     imp = imputer(missing_values=np.NaN, strategy='mean')
 # Drops rows with all nans
