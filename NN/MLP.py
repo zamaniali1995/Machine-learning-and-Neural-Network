@@ -11,7 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score as acc
 import pandas as pd
 from sklearn.impute import SimpleImputer as imputer
-#import random
+import matplotlib.pyplot as plt
 from sklearn.utils import shuffle
 
 # dataLoder function: inputs: dirTrain1, dirTrain2, dirTestData, dirTestTarget, mergeFlag, isTrain, scale
@@ -98,16 +98,16 @@ for i in range(len(targetTest)):
 targetTestModifid = tmp
 #%%
 # set learning variables 
-numHidden1 = 40
-numHidden2 = 30
-numHidden3 = 20
-learnignRate = 0.001
+numHidden1 = 100
+numHidden2 = 90
+numHidden3 = 80
+learnignRate = 0.0001
 displayStep = 1
 batchSize = 40
 numEpoch = 1000
 numCons1 = 0
-numCons2 = 1
-numCons3 = 1
+numCons2 = 0
+numCons3 = 0
 numConsO = 0
 
 tf.reset_default_graph()
@@ -182,7 +182,7 @@ consLayerOut = tf.constant(numConsO, dtype=tf.float64)
 zLayer1 = tf.nn.relu(tf.add(tf.matmul(x, wLayer1), bLayer1) + consLayer1)
 zLayer2 = tf.nn.relu(tf.add(tf.matmul(zLayer1, wLayer2), bLayer2) + consLayer2)
 zLayer3 = tf.nn.relu(tf.add(tf.matmul(zLayer2, wLayer3), bLayer3) + consLayer3)
-logit = tf.add(tf.matmul(zLayer3, wLayerOut), bLayerOut,) + consLayerOut
+logit = tf.add(tf.matmul(zLayer3, wLayerOut), bLayerOut) + consLayerOut
 yHat = tf.nn.sigmoid(tf.nn.relu(logit))
 # Define loss function and optimizer 
 crossEn = tf.nn.sigmoid_cross_entropy_with_logits(logits=logit, labels=yTrue)
@@ -190,6 +190,10 @@ cost = tf.reduce_mean(crossEn)
 optimizer = tf.train.AdamOptimizer(learning_rate=learnignRate).minimize(cost)
 init = tf.initialize_all_variables()
 # Session
+trainAccList = []
+testAccList = []
+trainErrList = []
+testErrList = []
 with tf.Session() as sess:
     init.run()
     for epoch in range(numEpoch):
@@ -201,11 +205,41 @@ with tf.Session() as sess:
             trainLoss += loss
         trainPredicted = sess.run(yHat, feed_dict={x: dataTrain})
         trainPredicted = np.argmax(trainPredicted, 1) + 1
+        trainErrList.append(trainLoss)
+        trainAccList.append(acc(targetTrain, trainPredicted))
         print("lass:", epoch, trainLoss)
-        print("Train Acc", acc(targetTrain, trainPredicted))
+        print("Train Acc", trainAccList[epoch])
         testPredicted = sess.run(yHat, feed_dict={x: dataTest})
         testPredicted = np.argmax(testPredicted, 1) + 1
-        print("Test Acc", acc(targetTest, testPredicted))
-    testPredicted = sess.run(yHat, feed_dict={x: dataTest})
-    testPredicted = np.argmax(testPredicted, 1) + 1
-    print(acc(targetTest, testPredicted))
+        testErrList.append(sess.run(cost, feed_dict={x: dataTest, yTrue: targetTestModifid}))
+        testAccList.append(acc(targetTest, testPredicted))
+        print("Test Acc", testAccList[epoch])
+    w1, b1, w2, b2, w3, b3, wO, bO = sess.run([wLayer1, bLayer1, wLayer2,
+                                               bLayer2, wLayer3, bLayer3, wLayerOut, bLayerOut])
+        
+    np.savetxt('./TestModel/Weights/wLayer1.csv', w1, delimiter=',')
+    np.savetxt('./TestModel/Weights/bLayer1.csv', b1, delimiter=',')
+    np.savetxt('./TestModel/Weights/wLayer2.csv', w2, delimiter=',')
+    np.savetxt('./TestModel/Weights/bLayer2.csv', b2, delimiter=',')
+    np.savetxt('./TestModel/Weights/wLayer3.csv', w3, delimiter=',')
+    np.savetxt('./TestModel/Weights/bLayer3.csv', b3, delimiter=',')
+    np.savetxt('./TestModel/Weights/wLayerO.csv', wO, delimiter=',')
+    np.savetxt('./TestModel/Weights/bLayerO.csv', bO, delimiter=',')
+#%%
+fig, ax = plt.subplots(2, 2, figsize=(10, 10))
+fig.suptitle("test accuracy = " + str(testAccList[numEpoch-1]))
+for a in ax.reshape(-1,1):
+    a[0].set_xlabel("epochs")
+ax[0][0].plot(trainErrList[:500], color='red', label='train loss')
+ax[0][0].plot(testErrList[:500], color='blue', label='test loss')
+ax[0][0].legend()
+ax[1][0].plot(trainErrList, color='red', label='train loss')
+ax[1][0].plot(testErrList, color='blue', label='test loss')
+ax[1][0].legend()
+ax[0][1].plot(trainAccList[:500], color='red', label='train accuracy')  
+ax[0][1].plot(testAccList[:500], color='blue', label='test accuracy')
+ax[0][1].legend()
+ax[1][1].plot(trainAccList, color='red', label='train accuracy')
+ax[1][1].plot(testAccList, color='blue', label='test accuracy')
+ax[1][1].legend()
+plt.savefig("../Plots/results"+".pdf")

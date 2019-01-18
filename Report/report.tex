@@ -36,10 +36,10 @@
     tabsize=2
 }
 \lstset{style=mystyle}
-\graphicspath{ {../Images/} }
+\graphicspath{ {../Plots/} }
 \title{
 	{\large Statistical learning: 4th assignment}\\}
-\author{Ali Zamani(96123035) \& Aryan Nasehzadeh(95)}
+\author{Ali Zamani(96123035) \& Aryan Nasehzadeh}
 \begin{document}
 \maketitle
 
@@ -47,8 +47,10 @@
 \section{Machin leraning algorithms}
 In this section, we will use different machine learning algorithms such as LDA, QDA, KNN, Decision tree, and kernel SVM. To access source code you can check the link:\\
 The sklearn package is used.
-Dataset has numbers of unknown features, one way is dropping all data with the unknown feature but in this approach, we lose a lot of data thus we should other approaches. 
-We replace unknown features with mean or min or max of features on that class, for example, if the unknown feature is associated with data in class 1, we replace that feature with the mean of features on that class. we also train our model with scaled and unscaled data and results are reported in tables \ref{QDATable}, \ref{LDAtable}, \ref{treeTable} , \ref{KNNTable} , \ref{SVMTable}. In SVM non-scaled data are used. As you see maximum accuracy belongs to \textbf{polynomial kernel SVM} and it is \textbf{58\%}.
+Dataset has numbers of unknown features, one way is dropping all data with the unknown feature but in this approach, we lose a lot of data thus we should use other approaches. 
+We replace unknown features with mean or min or max of features on that class, for example, if the unknown feature is associated with data in class 1, we replace that feature with the mean of features on class 1. we also train our model with scaled and unscaled data and results are reported in tables \ref{QDATable}, \ref{LDAtable}, \ref{treeTable} , \ref{KNNTable} , \ref{SVMTable}. In the SVM algorithm non-scaled data are used. As you see maximum accuracy belongs to \textbf{polynomial kernel SVM} and it is \textbf{58\%}.
+\section{Neural Network(NN)}
+In this section, we will create an NN model with 3 hidden layers. We use shuffled and unscaled data. Table \ref{NN} shows results for different neurons numbers in each layer. Figure \ref{figNN} show another result. As you can see in table \ref{NN} maximum test accuracy is 28\% and it is less than 58\% thus kernel SVM with polynomial kernel has better test accuracy.
 \newpage
 % QDA table
 \begin{table}[]
@@ -224,8 +226,35 @@ We replace unknown features with mean or min or max of features on that class, f
 		\hline
 	\end{tabular}
 \end{table}
-
-
+\begin{table}
+	\centering
+	\caption{Neural Network}
+	\label{NN}
+	\begin{tabular}{|l|l|l|l|l|l|l|}
+		\hline
+		\multicolumn{7}{|c|}{Neural Network (3 layers)}\\
+		\hline
+		Hidden 1 & Hidden 2 & Hidden 3 & Batch size & Learning rate & Train ACC & Test ACC\\
+		\hline
+		40 & 30 & 20 & 40 & 0.001 & 82\% & 28\%\\
+		\hline
+		50 & 40 & 30 & 40 & 0.001 & 88\% & 26\%\\
+		\hline
+		50 & 40 & 10 & 40 & 0.001 & 79\% & 26\%\\
+		\hline
+		40 & 40 & 30 & 20 & 0.001 & 90\% & 24\%\\
+		\hline
+		200 & 150 & 100 & 40 & 0.001 & 97\% & 26\%\\
+		\hline
+		100 & 90 & 80 & 60 & 0.0001 & 97\% & 28\%\\
+		\hline
+	\end{tabular}
+\end{table}
+\begin{figure}
+	\label{figNN}
+	\includegraphics[scale=0.5]{results}
+	\caption{Neural Network}
+\end{figure}
 
 
 \end{document}
