@@ -18,6 +18,7 @@ from sklearn.impute import SimpleImputer as imputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
 
+numClass = 36
 # dataLoder function: inputs: dirTrain1, dirTrain2, dirTestData, dirTestTarget, mergeFlag, isTrain, scale
 #                     outputs: data, dropIdx, target
 #                     if mergeFlage = 1 then datas in two directories dirTrain1 and dirTrain2 merge together 
@@ -56,7 +57,7 @@ def dataLoader(dirTrain1, dirTrain2, dirTestData, dirTestTarget, mergeFlag, isTr
     data = dataSet.drop(dataSet.index[dropIdx])
     if isTrain:
 # Replaces nan features with mean and scales features
-        for i in range(1, 37):
+        for i in range(1, numClass+1):
             lable.append(data[data['ID']==i])
             lable[i-1]= imp.fit_transform(lable[i-1])
             if scale:
@@ -67,70 +68,115 @@ def dataLoader(dirTrain1, dirTrain2, dirTestData, dirTestTarget, mergeFlag, isTr
         target, data = data[:, 0], data[:, 1:]
         np.savetxt('imputedTrain.csv', data, delimiter=',')
     else:
-        data = imp.fit_transform(data)
-        if scale:
-            scaler.fit_transform(data[:, 1:])
+#        data = imp.fit_transform(data)
+#        data = data.replace(np.NaN, 0)
+        
+        
+#        if scale:
+#            scaler.fit_transform(data[:, 1:])
         target, data = data[:, 0], data[:, 1:]
-        np.savetxt('imputedTest.csv', data, delimiter=',')
-    return data, dropIdx, target
+#        np.savetxt('imputedTest.csv', data, delimiter=',')
+    return data, dropIdx, target, lable
 # Dataset directories
 dirTrain1 = '../DataSet/Train_DB_1.csv'
 dirTrain2 = '../DataSet/Train_DB_2.csv'
 dirTestData = '../DataSet/Test_Data.csv'
 dirTestTarget = '../DataSet/Test_Labels.csv'
 # Loading train and test data
-dataTrain, dropIdxTrain, targetTrain = dataLoader(dirTrain1, dirTrain2, dirTestData,
+dataTrain, dropIdxTrain, targetTrain , label= dataLoader(dirTrain1, dirTrain2, dirTestData,
                                         dirTestTarget, 0, 1, 0)
-dataTest, dropIdxTest, targetTest = dataLoader(dirTrain1, dirTrain2, dirTestData,
-                                        dirTestTarget, 0, 0, 0)  
+#dataTest, dropIdxTest, targetTest, _ = dataLoader(dirTrain1, dirTrain2, dirTestData,
+#                                        dirTestTarget, 0, 0, 0)  
+# Loading test data
+dataTest = pd.read_csv(dirTestData) 
+targetTest = pd.read_csv(dirTestTarget)
+dataTest = dataTest.replace(0, np.NaN)
+nonDetected = pd.isnull(dataTest)
+#dataTest = pd.concat([target, data], axis=1)
+
 #%%
-# Classification QDA
-clf = qda()
-clf.fit(dataTrain, targetTrain)
-trainPredic = clf.predict(dataTrain)
-print("QDA Train ACC= ", acc(targetTrain, trainPredic))
-testPredict= clf.predict(dataTest)
-ans= acc(targetTest, testPredict)
-print("QDA Test ACC= ", ans)
+dataTestModified = []
+for i in range(numClass):
+    tmp = dataTest
+    avg = np.mean(label[i], axis=0)
+    for j in range(dataTest.shape[0]):
+        for k in range(dataTest.shape[1]):
+            if nonDetected.iloc[j, k]:
+                tmp.iloc[j, k] = avg[k + 1]
+    dataTestModified.append(tmp)
 
-# Classification LDA
-clf2= lda()
-clf2.fit(dataTrain,targetTrain)
-trainPredic = clf.predict(dataTrain)
-print("\nLDA train ACC= ", acc(targetTrain, trainPredic))
-predictLDA= clf2.predict(dataTest)
-ans2= acc(targetTest, predictLDA)
-print("LDA test ACC= ", ans2)
+#%%
+qdaList = []
+ldaList = []
+treeList = []
+KNNList = []
+SVMList = []
+for i in range(numClass):
+    dataTest = dataTestModified[i]
 
-# Classification Tree
-clf3= tree.DecisionTreeClassifier()
-clf3.fit(dataTrain,targetTrain)
-trainPredic = clf.predict(dataTrain)
-print("\nTree train ACC= ", acc(targetTrain, trainPredic))
-predictTree= clf3.predict(dataTest)
-ans3= acc(targetTest, predictTree)
-print("Tree test ACC= ", ans3)
-
-# Classification KNN 
-knn = Knearest(n_neighbors=2)
-knn.fit(dataTrain,targetTrain)
-trainPredic = clf.predict(dataTrain)
-print("\nKnn train ACC= ", acc(targetTrain, trainPredic))
-predictKNN = knn.predict(dataTest)
-ans5= acc(targetTest, predictKNN)
-print("KNN test ACC= ", ans5)
-
-
-# Classification Kernel SVM
-#clf4 = svm.NuSVC(kernel = 'sigmoid', coef0=0.1, gamma='scale')
-#clf4 = svm.NuSVC(kernel = 'rbf', gamma=0.5)
-clf4 = svm.NuSVC(kernel = 'poly',coef0=120 ,gamma='scale')
-#clf4 = svm.NuSVC(kernel = 'linear', gamma='scale')
-clf4.fit(dataTrain, targetTrain)
-trainPredic = clf.predict(dataTrain)
-print("\nkernel SVM train ACC= ", acc(targetTrain, trainPredic))
-predicteSVM = clf4.predict(dataTest)
-ans4 = acc(targetTest, predicteSVM)
-print ("kernel SVM test ACC= ", ans4)
+    # Classification QDA
+    clf = qda()
+    clf.fit(dataTrain, targetTrain)
+    trainPredic = clf.predict(dataTrain)
+#    print("QDA Train ACC= ", acc(targetTrain, trainPredic))
+    testPredict= clf.predict(dataTest)
+    ans1 = acc(targetTest, testPredict)
+    qdaList.append(ans1)
+#    print("QDA Test ACC= ", ans1)
+    
+    # Classification LDA
+    clf2= lda()
+    clf2.fit(dataTrain,targetTrain)
+    trainPredic = clf.predict(dataTrain)
+    print("\nLDA train ACC= ", acc(targetTrain, trainPredic))
+    predictLDA= clf2.predict(dataTest)
+    ans2 = acc(targetTest, predictLDA)
+    ldaList.append(ans2) 
+#    print("LDA test ACC= ", ans2)
+    
+    # Classification Tree
+    clf3= tree.DecisionTreeClassifier()
+    clf3.fit(dataTrain,targetTrain)
+    trainPredic = clf.predict(dataTrain)
+#    print("\nTree train ACC= ", acc(targetTrain, trainPredic))
+    predictTree= clf3.predict(dataTest)
+    ans3= acc(targetTest, predictTree)
+    treeList.append(ans3)
+#    print("Tree test ACC= ", ans3)
+    
+    # Classification KNN 
+    knn = Knearest(n_neighbors=2)
+    knn.fit(dataTrain,targetTrain)
+    trainPredic = clf.predict(dataTrain)
+#    print("\nKnn train ACC= ", acc(targetTrain, trainPredic))
+    predictKNN = knn.predict(dataTest)
+    ans4= acc(targetTest, predictKNN)
+    KNNList.append(ans4)
+#    print("KNN test ACC= ", ans4)
+    
+    
+    # Classification Kernel SVM
+    #clf4 = svm.NuSVC(kernel = 'sigmoid', coef0=0.1, gamma='scale')
+    #clf4 = svm.NuSVC(kernel = 'rbf', gamma=0.5)
+    clf4 = svm.NuSVC(kernel = 'poly',coef0=120 ,gamma='scale')
+    #clf4 = svm.NuSVC(kernel = 'linear', gamma='scale')
+    clf4.fit(dataTrain, targetTrain)
+    trainPredic = clf.predict(dataTrain)
+#    print("\nkernel SVM train ACC= ", acc(targetTrain, trainPredic))
+    predicteSVM = clf4.predict(dataTest)
+    ans5 = acc(targetTest, predicteSVM)
+    SVMList.append(ans5)
+#    print ("kernel SVM test ACC= ", ans5)
+#%%
+qdaACC = max(qdaList)
+ldaACC = max(ldaList)
+treeACC = max(treeList)
+KNNACC = max(KNNList)
+SVMACC = max(SVMList)
+print('qda ACC', qdaACC)
+print('lda ACC', ldaACC)
+print('tree ACC', treeACC)
+print('KNN ACC', KNNACC)
+print('SVM ACC', SVMACC)
 
     
