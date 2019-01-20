@@ -46,11 +46,19 @@
 \newpage
 \section{Machin leraning algorithms}
 In this section, we will use different machine learning algorithms such as LDA, QDA, KNN, Decision tree, and kernel SVM. To access source code you can check the link:\\
+https://github.com/zamaniali1995/Machine-learning-and-Neural-Network\\
 The sklearn package is used.
 Dataset has numbers of unknown features, one way is dropping all data with the unknown feature but in this approach, we lose a lot of data thus we should use other approaches. 
 We replace unknown features with mean or min or max of features on that class, for example, if the unknown feature is associated with data in class 1, we replace that feature with the mean of features on class 1. we also train our model with scaled and unscaled data and results are reported in tables \ref{QDATable}, \ref{LDAtable}, \ref{treeTable} , \ref{KNNTable} , \ref{SVMTable}. In the SVM algorithm non-scaled data are used. As you see maximum accuracy belongs to \textbf{polynomial kernel SVM} and it is \textbf{58\%}.
 \section{Neural Network(NN)}
-In this section, we will create an NN model with 3 hidden layers. We use shuffled and unscaled data. Table \ref{NN} shows results for different neurons numbers in each layer. Figure \ref{figNN} show another result. As you can see in table \ref{NN} maximum test accuracy is 28\% and it is less than 58\% thus kernel SVM with polynomial kernel has better test accuracy.
+In this section, we will create an NN model with 3 hidden layers. We use shuffled and unscaled data. Table \ref{NN} shows results for different neurons numbers in each layer. Figure \ref{figNN} show another result. As you can see in table \ref{NN} maximum test accuracy is 28\% and it is less than 58\% thus kernel SVM with polynomial kernel has better test accuracy.\\
+\section{Ideas}
+We have shown that if the concatenated dataset is used then we do not have good accuracy but if we use the first dataset as training we can have good accuracy. It is shown that our test dataset is correlated with first train dataset. We know that first dataset measures with one device and another dataset measures with another device we can add another feature two show that which device is used.\\
+We know that 36 class belong to 36 places that data is sampled so the data can be time series. according to this, we can use LSTM.\\
+If we plot our test dataset we see that the number of class 16 is more than other classes so we faced unbalanced test dataset. according to this, if we make a model that predicts class 16, we have good accuracy in test dataset so it is better to use balanced test dataset and calculate the accuracy of the model.\\
+We replace zeros with mean. Another approach can be used. For example, we can fit a natural cubic spline to our model and after that find value of unknown feature from the natural cubic spline.\\
+To visualize data set a number of plots are placed at the end of the report.
+
 \newpage
 % QDA table
 \begin{table}[]
@@ -255,6 +263,20 @@ In this section, we will create an NN model with 3 hidden layers. We use shuffle
 	\includegraphics[scale=0.5]{results}
 	\caption{Neural Network}
 \end{figure}
+\begin{figure}
+	\label{figNN}
+\includegraphics[scale=1]{numberOfTrainClasses}
+	\caption{Number of data in each class}
+\end{figure}
+\begin{figure}
+	\label{figNN}
+	\includegraphics[scale=0.6]{MLACC}
+	\caption{Predicted test in each algorithm}
+\end{figure}
 
-
+\begin{figure}
+	\label{figNN}
+	\includegraphics[scale=0.25]{feature}
+	\caption{Value of each feature}
+\end{figure}
 \end{document}

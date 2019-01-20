@@ -68,7 +68,7 @@ def dataLoader(dirTrain1, dirTrain2, dirTestData, dirTestTarget, mergeFlag, isTr
             scaler.fit_transform(data[:, 1:])
         target, data = data[:, 0], data[:, 1:]
         np.savetxt('imputedTest.csv', data, delimiter=',')
-    return data, dropIdx, target
+    return data, dropIdx, target, lable
 # Class and feature number 
 numFeatures = 19
 numClass = 36
@@ -78,10 +78,10 @@ dirTrain2 = '../DataSet/Train_DB_2.csv'
 dirTestData = '../DataSet/Test_Data.csv'
 dirTestTarget = '../DataSet/Test_Labels.csv'
 # Loading train and test data
-dataTrain, dropIdxTrain, targetTrain = dataLoader(dirTrain1, dirTrain2, dirTestData,
+dataTrain, dropIdxTrain, targetTrain, lable = dataLoader(dirTrain1, dirTrain2, dirTestData,
                                         dirTestTarget, 1, 1, 0)
-dataTest, dropIdxTest, targetTest = dataLoader(dirTrain1, dirTrain2, dirTestData,
-                                        dirTestTarget, 1, 0, 0)
+#dataTest, dropIdxTest, targetTest = dataLoader(dirTrain1, dirTrain2, dirTestData,
+#                                        dirTestTarget, 1, 0, 0)
  
 tmp = np.zeros((len(targetTrain), numClass))
 for i in range(len(targetTrain)):
@@ -90,6 +90,26 @@ for i in range(len(targetTrain)):
             tmp[i][j-1]=1
 targetTrainModifid = tmp
 
+
+# Loading test data
+dataTest = pd.read_csv(dirTestData) 
+targetTest = pd.read_csv(dirTestTarget)
+dataTest = dataTest.replace(0, np.NaN)
+nonDetected = pd.isnull(dataTest)
+#dataTest = pd.concat([target, data], axis=1)
+
+#%%
+dataTestModified = []
+for i in range(numClass):
+    tmp = dataTest
+    avg = np.mean(lable[i], axis=0)
+    for j in range(dataTest.shape[0]):
+        for k in range(dataTest.shape[1]):
+            if nonDetected.iloc[j, k]:
+                tmp.iloc[j, k] = avg[k + 1]
+    dataTestModified.append(tmp)
+dataTest = dataTestModified[0]
+#%%
 tmp = np.zeros((len(targetTest),numClass))
 for i in range(len(targetTest)):
     for j in range(numClass):

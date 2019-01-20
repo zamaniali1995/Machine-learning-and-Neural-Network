@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score as acc
 from sklearn.impute import SimpleImputer as imputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
-
+import matplotlib.pyplot as plt 
 numClass = 36
 # dataLoder function: inputs: dirTrain1, dirTrain2, dirTestData, dirTestTarget, mergeFlag, isTrain, scale
 #                     outputs: data, dropIdx, target
@@ -104,7 +104,14 @@ for i in range(numClass):
             if nonDetected.iloc[j, k]:
                 tmp.iloc[j, k] = avg[k + 1]
     dataTestModified.append(tmp)
-
+#%%
+numOfTrCla = []
+for i in range(numClass):
+    numOfTrCla.append(label[i].shape[0])
+plt.plot(numOfTrCla, 'r')
+plt.ylabel("Number of Classes")
+plt.xlabel("Classes")
+plt.savefig('../Plots/numberOfTrainClasses.pdf')
 #%%
 qdaList = []
 ldaList = []
@@ -119,8 +126,8 @@ for i in range(numClass):
     clf.fit(dataTrain, targetTrain)
     trainPredic = clf.predict(dataTrain)
 #    print("QDA Train ACC= ", acc(targetTrain, trainPredic))
-    testPredict= clf.predict(dataTest)
-    ans1 = acc(targetTest, testPredict)
+    predicteQDA= clf.predict(dataTest)
+    ans1 = acc(targetTest, predicteQDA)
     qdaList.append(ans1)
 #    print("QDA Test ACC= ", ans1)
     
@@ -178,5 +185,33 @@ print('lda ACC', ldaACC)
 print('tree ACC', treeACC)
 print('KNN ACC', KNNACC)
 print('SVM ACC', SVMACC)
-
-    
+fig, ax = plt.subplots(3, 2, figsize=(10, 10))
+fig.suptitle("SVM "+"test accuracy = " + str(SVMACC))
+for a in ax.reshape(-1,1):
+    a[0].set_xlabel("data")
+    a[0].set_ylabel("class")
+ax[0][0].plot(targetTest, color='red', label='Target test')
+ax[0][0].plot(predicteSVM, color='blue', label='SVM predicted')
+ax[0][0].legend()
+ax[1][0].plot(targetTest, color='red', label='Target test')
+ax[1][0].plot(predicteQDA, color='blue', label='QDA predicted')
+ax[1][0].legend()
+ax[0][1].plot(targetTest, color='red', label='Target test')  
+ax[0][1].plot(predictKNN, color='blue', label='KNN predicted')
+ax[0][1].legend()
+ax[1][1].plot(targetTest, color='red', label='Target test')
+ax[1][1].plot(predictLDA, color='blue', label='LDA predicted')
+ax[1][1].legend()
+ax[2][0].plot(targetTest, color='red', label='Targer test')
+ax[2][0].plot(predictTree, color='blue', label='Tree predicted')
+ax[2][0].legend()
+plt.savefig('../Plots/MLACC.pdf')
+#%%
+fig, ax = plt.subplots(10, 2, figsize=(30, 100))
+for i, j in 
+    i[0].scatter( np.arange(dataTrain.shape[0]), dataTrain[:,0])
+#for i in range(ax.shape[0]):
+#    for j in range(ax.shape[1]):
+#        ax[i][j].set_xlabel("dd")
+#        ax[i][j].scatter( np.arange(dataTrain.shape[0]), dataTrain[:,0])
+#    

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.1.17)  18 JAN 2019 17:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.1.17)  20 JAN 2019 20:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -577,7 +577,17 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 13.
 LaTeX Warning: Unused global option(s):
     [17pt].
 
-(./report.aux)
+(./report.aux
+
+LaTeX Warning: Label `figNN' multiply defined.
+
+
+LaTeX Warning: Label `figNN' multiply defined.
+
+
+LaTeX Warning: Label `figNN' multiply defined.
+
+)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
@@ -594,8 +604,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
 LaTeX Font Info:    ... okay on input line 43.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 43.
 LaTeX Font Info:    ... okay on input line 43.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count117
 \scratchdimen=\dimen122
@@ -647,57 +656,101 @@ LaTeX Info: Redefining \nameref on input line 43.
 \c@lstlisting=\count124
  [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 54--55
+
+ []
+
+[2]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 56.
-
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 88.
-
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 120.
+               Default added (so using `tbp') on input line 64.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 152.
+               Default added (so using `tbp') on input line 96.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 184.
+               Default added (so using `tbp') on input line 128.
 
 
-Overfull \hbox (54.19505pt too wide) in paragraph at lines 233--252
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 160.
+
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 192.
+
+
+Overfull \hbox (54.19505pt too wide) in paragraph at lines 241--260
  [][] 
  []
 
-<../Plots/results.pdf, id=39, 722.7pt x 722.7pt>
+<../Plots/results.pdf, id=44, 722.7pt x 722.7pt>
 File: ../Plots/results.pdf Graphic file (type pdf)
 <use ../Plots/results.pdf>
-Package pdftex.def Info: ../Plots/results.pdf  used on input line 255.
+Package pdftex.def Info: ../Plots/results.pdf  used on input line 263.
 (pdftex.def)             Requested size: 361.3491pt x 361.3491pt.
 
-Overfull \hbox (16.3491pt too wide) in paragraph at lines 255--256
+Overfull \hbox (16.3491pt too wide) in paragraph at lines 263--264
 [][] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 260.
-[3] [4] [5 <../Plots/results.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 260.
+<../Plots/numberOfTrainClasses.pdf, id=45, 433.62pt x 289.08pt>
+File: ../Plots/numberOfTrainClasses.pdf Graphic file (type pdf)
+<use ../Plots/numberOfTrainClasses.pdf>
+Package pdftex.def Info: ../Plots/numberOfTrainClasses.pdf  used on input line 
+268.
+(pdftex.def)             Requested size: 433.61894pt x 289.07928pt.
+
+Overfull \hbox (88.61894pt too wide) in paragraph at lines 268--269
+[][] 
+ []
+
+<../Plots/MLACC.pdf, id=46, 722.7pt x 722.7pt>
+File: ../Plots/MLACC.pdf Graphic file (type pdf)
+<use ../Plots/MLACC.pdf>
+Package pdftex.def Info: ../Plots/MLACC.pdf  used on input line 273.
+(pdftex.def)             Requested size: 433.62334pt x 433.62334pt.
+
+Overfull \hbox (88.62334pt too wide) in paragraph at lines 273--274
+[][] 
+ []
+
+<../Plots/feature.pdf, id=47, 1445.4pt x 2168.1pt>
+File: ../Plots/feature.pdf Graphic file (type pdf)
+<use ../Plots/feature.pdf>
+Package pdftex.def Info: ../Plots/feature.pdf  used on input line 279.
+(pdftex.def)             Requested size: 361.34912pt x 542.02368pt.
+
+Overfull \hbox (16.34912pt too wide) in paragraph at lines 279--280
+[][] 
+ []
+
+
+LaTeX Warning: Float too large for page by 15.96812pt on input line 281.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 282.
+[3] [4] [5 <../Plots/results.pdf>] [6 <../Plots/numberOfTrainClasses.pdf>]
+[7 <../Plots/MLACC.pdf>] [8 <../Plots/feature.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 282.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 260.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 260.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 282.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 282.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 0453DEA104C43578A25644B4A19514FA;116.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 260.
+(rerunfilecheck)             Checksum: D050EB4BE2467DD6026BC22E2464D44A;156.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 282.
  ) 
 Here is how much of TeX's memory you used:
- 7313 strings out of 492982
- 103618 string characters out of 6134896
- 214578 words of memory out of 5000000
- 10805 multiletter control sequences out of 15000+600000
+ 7336 strings out of 492982
+ 104137 string characters out of 6134896
+ 215605 words of memory out of 5000000
+ 10818 multiletter control sequences out of 15000+600000
  8716 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  28i,9n,32p,558b,329s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -705,10 +758,10 @@ Here is how much of TeX's memory you used:
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on report.pdf (5 pages, 96133 bytes).
+Output written on report.pdf (8 pages, 333168 bytes).
 PDF statistics:
- 106 PDF objects out of 1000 (max. 8388607)
- 66 compressed objects within 1 object stream
- 15 named destinations out of 1000 (max. 500000)
- 22 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 244 PDF objects out of 1000 (max. 8388607)
+ 103 compressed objects within 2 object streams
+ 22 named destinations out of 1000 (max. 500000)
+ 45 words of extra memory for PDF output out of 10000 (max. 10000000)
 
